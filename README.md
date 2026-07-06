@@ -1,17 +1,14 @@
-> **Le jeu de Quarto est un chef-d'œuvre de stratégie abstraite : 16 pièces uniques, 4 critères de victoire, mais un seul twist fatal... c'est votre adversaire qui choisit la pièce que vous devez jouer.**
+> **Etant donné que j'ai fait faire le précédent README par IA (et qu'il était affreusement mal écrit), j'ai décidé de le refaire en commençant par cette sitation "La meilleure défense, c'est d'en avoir deux". **
 
 ---
 
-### 🎯 Le Projet
+### Le Projet
 
-Ce dépôt n'est pas (juste) une implémentation du jeu. Son but ultime est de **résoudre le Quarto**. 
+L'objectif immédiat de ce projet est de résoudre mathématiquement le jeu de Quarto en explorant toutes les possibilités qu'offre le jeu. 
+A terme, je compte implémenter une interface de jeu avec une "review" en fin de partie dévoilant la précision des joueurs.
 
-En utilisant des algorithmes d'exploration d'arbre de recherche (comme Minimax, l'élagage Alpha-Bêta ou du Deep Reinforcement Learning), l'objectif est de cartographier mathématiquement le jeu pour déterminer s'il existe une stratégie gagnante absolue du premier (ou du second) joueur.
-
-### ⚡ Fonctionnalités clés
-* 🎲 **Engine de jeu synchrone** optimisé pour le calcul de structures complexes.
-* 🧠 **Algorithmes de résolution** en cours de développement (Exploration d'arbre de décision).
-* 📊 **Évaluation des configurations** pour détecter les états de "pat" ou de victoire forcée.
+### Fonctionnalités clefs
+* **Bug optimisé** : mon programme arrive actuellement à résoudre un bel exploi à savoir le combot ultime RAM exploitée à fond suivi d'un crash final (il n'y a pas de quoi).
 
 ---
-*Projet en cours de développement. Les mathématiques vaincront le hasard.*
+*Projet en cours de développement.*
