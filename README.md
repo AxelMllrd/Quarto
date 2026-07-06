@@ -1,4 +1,4 @@
-> **Etant donné que j'ai fait faire le précédent README par IA (et qu'il était affreusement mal écrit), j'ai décidé de le refaire en commençant par cette sitation "La meilleure défense, c'est d'en avoir deux". **
+> Etant donné que j'ai fait faire le précédent README par IA (et qu'il était affreusement mal écrit), j'ai décidé de le refaire en commençant par cette sitation "La meilleure défense, c'est d'en avoir deux".
 
 ---
 
