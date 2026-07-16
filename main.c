@@ -3,6 +3,7 @@
 #include <time.h>
 #include <SDL3/SDL_events.h>
 
+#include "fichiers.h"
 #include "quarto.h"
 #include "tests.h"
 
@@ -14,8 +15,15 @@ int main(void) {
     struct tm *t_local = localtime(&t);
     printf("Lancement a %02d:%02d:%02d\n\n", t_local->tm_hour, t_local->tm_min, t_local->tm_sec);
 
-    test_solution_coup(7);
-    //test_trier();
+
+    creer_sommaire();
+    for (int i = 0; i < 6; i++) {
+        int nb_fichiers = lire_sommaire(i);
+        printf("Nombre de fichiers : %d\n", nb_fichiers);
+        for (int j = 0; j < nb_fichiers; j++) {
+            test_solution_coup(i, j);
+        }
+    }
 
     double duree = get_time();
     time(&t);

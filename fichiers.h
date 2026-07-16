@@ -1,6 +1,8 @@
 #ifndef FICHIERS_H
 #define FICHIERS_H
 
+typedef unsigned long long Valeur;
+
 typedef struct Liste Liste;
 typedef struct Table Table;
 
@@ -19,19 +21,25 @@ int trier_fichier(const char *nom_fichier);
  *  -1 sinon (le fichier reste inchange)
  */
 
-int ecrire(Liste *liste, const char *nom_fichier);
+Valeur ecrire(Liste *liste, const char *nom_fichier);
 /* Ecrit dans un fichier (par ex. "solution/coup_1.bin") les noeuds enregistres
  * RETOURNE
  *  >0 pour la quantite de noeuds qui n'ont pas ete ecrits dans le fichier
  *   0 en cas de succes
  */
 
-int ecrire_detruire_table(Table *table, const char *nom_fichier);
+Valeur ecrire_detruire_table(Table *table, const char *nom_fichier);
 /* Ecrit dans un fichier (par ex. "solution/coup_1.bin") les noeuds enregistres et detruit la table
  * RETOURNE
  *  >0 pour la quantite de noeuds qui n'ont pas ete ecrits dans le fichier
  *   0 en cas de succes
  *  <0 en cas d'echec critique de l'ecriture (la table est quand meme detruite)
  */
+
+Valeur creer_sommaire();
+Valeur fusionner(int coup, int nb_fichiers);
+Valeur separer_fichier(int coup);
+int lire_sommaire(int coup);
+
 
 #endif //FICHIERS_H

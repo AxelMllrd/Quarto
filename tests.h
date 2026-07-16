@@ -9,7 +9,7 @@ double get_time();
 Plateau rand_plateau();
 void test_hachage();
 void test_table();
-void test_solution_coup(int nb_coups);
+void test_solution_coup(int coup, int indice);
 void test_trier();
 
 #endif //TESTS_H

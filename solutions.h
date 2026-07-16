@@ -3,7 +3,7 @@
 
 typedef struct Precalcul Precalcul;
 
-int solution_coup(const Precalcul *precalcul, int coup);
+int solution_coup(const Precalcul *precalcul, int coup, int indice);
 /* Calcule et enregistre dans un fichier nomme "solution/coup_{coup}.bin" les noeuds qui decoulent des positions
  * precedentes - ces dernieres sont obtenues par le fichier precedent
  * RETOURNE

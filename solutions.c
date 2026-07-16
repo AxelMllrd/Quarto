@@ -1,35 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "affichage.h"
 #include "quarto.h"
 #include "precalcul.h"
 #include "canonique.h"
 #include "table.h"
 #include "fichiers.h"
 
-#define MAX_RAM 500000000
-
-int solution_coup(const Precalcul *precalcul, int coup) {
+int solution_coup(const Precalcul *precalcul, int coup, int indice) {
     if (coup < 0 || coup >= 16) return -1;
 
-    char nom_fichier[] = "solutions/coup_0.00.bin";
+    char nom_fichier_source[] = "solutions/coup00.000.bin";
     Liste *liste;
     if (coup == 0) {
         liste = liste_depart();
         if (liste == NULL) return -1;
+        indice = 0;
     }
     else {
-        nom_fichier[15] = (char)('0' + coup);
-        liste = charger_fichier(nom_fichier);
+        nom_fichier_source[14] = (char)('0' + (coup / 10) % 10);
+        nom_fichier_source[15] = (char)('0' + coup % 10);
+        nom_fichier_source[17] = (char)('0' + (indice / 100) % 10);
+        nom_fichier_source[18] = (char)('0' + (indice / 10) % 10);
+        nom_fichier_source[19] = (char)('0' + indice % 10);
+        liste = charger_fichier(nom_fichier_source);
         if (liste == NULL) return -2;
 
-        if (liste->nb_noeuds * 20 * sizeof(Element) > MAX_RAM) { // Ne pas depasser 1 Go de RAM
+        if (liste->nb_noeuds * 20 * sizeof(Element) > MAX_RAM) {
             detruire_liste(liste);
             return -3;
         }
     }
 
-    Table *table = creer_table(liste->nb_noeuds * 20);
+    Table *table = creer_table((int)liste->nb_noeuds * 20);
     if (table == NULL) {
         detruire_liste(liste);
         return -4;
@@ -37,11 +41,11 @@ int solution_coup(const Precalcul *precalcul, int coup) {
 
     int err_creation_noeuds = 0;
     const int nulle = 0, joueur_suivant = 1 + !(coup % 2);
-    const int pourcent = liste->nb_noeuds / 100 == 0 ? 1 : liste->nb_noeuds / 100;
+    const int pourcent = liste->nb_noeuds / 100 == 0 ? 1 : (int)(liste->nb_noeuds / 100);
 
-    printf("Nombre de noeuds : %d\n", liste->nb_noeuds);
+    printf("Nombre de noeuds initiaux : %lld\n", liste->nb_noeuds);
     for (int i = 0; i < liste->nb_noeuds; i++) {
-        if (i % pourcent == 0) printf("\r%d%%", 100 * i / liste->nb_noeuds);
+        if (i % pourcent == 0) printf("\r%d%%", (int)(100 * i / liste->nb_noeuds));
 
         const Plateau *plateau = &liste->noeuds[i].plateau;
 
@@ -65,7 +69,7 @@ int solution_coup(const Precalcul *precalcul, int coup) {
                     continue;
                 }
 
-                if (n->victoire == -1) {
+                if (n->victoire == (Octet)-1) {
                     if (victoire(&p, precalcul->alignements)) n->victoire = joueur_suivant;
                     else n->victoire = nulle;
                 }
@@ -74,34 +78,21 @@ int solution_coup(const Precalcul *precalcul, int coup) {
     }
     printf("\r100%%\n");
 
-    nom_fichier[15] = (char)('1' + coup);
-
     detruire_liste(liste);
+    printf("Nombre de noeuds dans table : %d\n", table->nb_noeuds);
     liste = convertir_detruire_table(table);
     if (liste == NULL) return -5;
-    //trier_liste(liste);
+    trier_liste(liste);
+    printf("Nombre de noeuds dans liste : %lld\n", liste->nb_noeuds);
 
-    int nb_fichiers = 1 + liste->nb_noeuds * 20 * (int)sizeof(Element) / MAX_RAM;
-    Liste listes_separees[nb_fichiers];
+    char nom_fichier_destination[] = "temporaire/000.bin";
+    nom_fichier_destination[11] = (char)('0' + (indice / 100) % 10);
+    nom_fichier_destination[12] = (char)('0' + (indice / 10) % 10);
+    nom_fichier_destination[13] = (char)('0' + indice % 10);
 
-    int nb_noeuds = liste->nb_noeuds / nb_fichiers, additionnels = liste->nb_noeuds % nb_fichiers;
-    int indice = 0;
-    for (int i = 0; i < nb_fichiers; i++) {
-        listes_separees[i].noeuds = liste->noeuds + indice;
-        listes_separees[i].nb_noeuds = nb_noeuds + (i < additionnels ? 1 : 0);
-        indice += listes_separees[i].nb_noeuds;
-    }
-
-    for (int i = 0; i < nb_fichiers; i++) {
-        nom_fichier[17] = (char)('0' + i / 10);
-        nom_fichier[18] = (char)('0' + i % 10);
-        int err = ecrire(&listes_separees[i], nom_fichier);
-        if (err < 0) {
-            detruire_liste(liste);
-            return err -7;
-        }
-    }
+    Valeur n = ecrire(liste, nom_fichier_destination);
 
     detruire_liste(liste);
+    if (n) return -6;
     return err_creation_noeuds;
 }

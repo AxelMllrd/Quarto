@@ -1,6 +1,8 @@
 #ifndef QUARTO_H
 #define QUARTO_H
 
+#define MAX_RAM 500000000
+
 typedef unsigned char Octet;
 typedef unsigned short Bitboard;
 typedef unsigned long long Valeur;
@@ -23,7 +25,7 @@ typedef struct Noeud {
 
 typedef struct Liste {
     Noeud *noeuds;
-    int nb_noeuds;
+    Valeur nb_noeuds;
 } Liste;
 
 typedef struct Element {

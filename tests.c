@@ -115,7 +115,7 @@ void test_table() {
     detruire_table(table);
 }
 
-void test_solution_coup(int nb_coups) {
+void test_solution_coup(int coup, int indice) {
     Precalcul *precalcul = precaluler();
     if (precalcul == NULL) {
         printerr("Erreur des precalculs\n");
@@ -123,14 +123,28 @@ void test_solution_coup(int nb_coups) {
     }
 
     printf("Calculs des solutions...\n");
-    for (int i = 0; i < nb_coups; i++) {
-        double t = get_time();
-        int err = solution_coup(precalcul, i);
-        if (err) {
-            printerr("Erreur (%d) de calcul au coup %d\n", err, i);
-            return;
-        }
-        printf("Solution coup %d calculee en %f s\n", i, get_time() - t);
+    double t = get_time();
+    int err = solution_coup(precalcul, coup, indice);
+    if (err) {
+        printerr("Erreur (%d) de calcul au coup %d\n", err, coup);
+        return;
+    }
+    printf("Solution coup %d calculee en %f s\n", coup, get_time() - t);
+    int nb_fichiers = lire_sommaire(coup);
+    if (nb_fichiers < 1) {
+        printerr("Erreur (%d) lors de la lecture du sommaire\n", nb_fichiers);
+        return;
+    }
+    printf("Fusion des %d fichiers temporaires...\n", nb_fichiers);
+    if ((err = (int)fusionner(coup + 1, nb_fichiers))) {
+        printerr("Erreur (%d) lors de la fusion des fichiers\n", err);
+        return;
+    }
+
+    printf("Separation du fichier...\n");
+    if ((err = (int)separer_fichier(coup + 1))) {
+        printerr("Erreur (%d) lors de la separation du fichier\n", err);
+        return;
     }
 
     printf("\n");
